@@ -16,7 +16,7 @@ public class Task {
     @Override
     public String toString() {
         return "Título: " + this.title + "\nDescrição: " + this.description +
-                "\nVencimento: " + this.validity;
+                "\nData da realização da tarefa: " + this.validity;
     }
 
     public String getTitle() {
