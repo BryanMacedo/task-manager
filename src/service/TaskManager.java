@@ -52,15 +52,15 @@ public class TaskManager {
             System.out.println("\nListando as tarefas existentes:");
             listTasks();
 
-            System.out.print("Digite o título da tarefa que deseja excluir: ");
+            System.out.println("Digite o título da tarefa que deseja excluir: ");
             String titleChoice = sc.nextLine();
             System.out.println();
 
-            tasks.removeIf(task -> task.getTitle().equals(titleChoice));
-            if (!tasks.removeIf(task -> task.getTitle().equals(titleChoice))){
-                System.out.println("Tarefa " + "\"" + titleChoice + "\"" + " não encontrada.\n");
-            }else {
+            if (tasks.removeIf(task -> task.getTitle().equals(titleChoice))){
+                tasks.removeIf(task -> task.getTitle().equals(titleChoice));
                 System.out.println("Tarefa removida com sucesso!\n");
+            }else {
+                System.out.println("Tarefa " + "\"" + titleChoice + "\"" + " não encontrada.\n");
             }
         }
     }
