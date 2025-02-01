@@ -30,12 +30,12 @@ public class TaskManager {
 
         Task task = new Task(title, description, validity);
         tasks.add(task);
-        System.out.println("Tarefa adicionada\n");
+        System.out.println("Tarefa adicionada.\n");
     }
 
     public void listTasks() {
         if (tasks.isEmpty()){
-            System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder lista-lá\n");
+            System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder lista-lá.\n");
         }else {
             for (Task listTask : tasks) {
                 System.out.println("\n" + listTask);
@@ -47,18 +47,18 @@ public class TaskManager {
 
     public void removeTask() {
         if (tasks.isEmpty()){
-            System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder utilizar a opção de remover uma tarefa\n");
+            System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder utilizar a opção de remover uma tarefa.\n");
         }else{
             System.out.println("\nListando as tarefas existentes:");
             listTasks();
 
-            System.out.println("Digite o título da tarefa que deseja excluir");
+            System.out.print("Digite o título da tarefa que deseja excluir: ");
             String titleChoice = sc.nextLine();
             System.out.println();
 
             tasks.removeIf(task -> task.getTitle().equals(titleChoice));
             if (!tasks.removeIf(task -> task.getTitle().equals(titleChoice))){
-                System.out.println("Tarefa " + "\"" + titleChoice + "\"" + " não encontrada\n");
+                System.out.println("Tarefa " + "\"" + titleChoice + "\"" + " não encontrada.\n");
             }else {
                 System.out.println("Tarefa removida com sucesso!\n");
             }
@@ -67,9 +67,9 @@ public class TaskManager {
 
     public void saveTasks(){
         if (tasks.isEmpty()){
-            System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder salva-lá\n");
+            System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder salva-lá.\n");
         }else {
-            System.out.print("Digite o nome que deseja para o arquivo: ");
+            System.out.print("\nDigite o nome que deseja para o arquivo: ");
             String fileName = sc.nextLine();
             String path = "C:\\Users\\conta\\Desktop\\TAREFAS\\" + fileName + ".txt";
             System.out.println();
@@ -77,9 +77,9 @@ public class TaskManager {
                 for (Task task : tasks) {
                     writer.write(task + "\n\n");
                 }
-                System.out.println("Tarefa salva\n");
+                System.out.println("Tarefa salva.\n");
             } catch (IOException e) {
-                System.out.println("Erro ao tentar salvar arquivo");
+                System.out.println("Erro ao tentar salvar arquivo.");
                 e.printStackTrace();
             }
         }

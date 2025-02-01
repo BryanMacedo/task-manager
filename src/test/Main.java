@@ -36,6 +36,9 @@ public class Main {
                 case 4 -> {
                     taskManager.saveTasks();
                 }
+                default -> {
+                    System.out.println("\nOpção não encontrada, escolha uma opção valida.\n");
+                }
             }
         }
         sc.close();
