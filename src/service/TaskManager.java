@@ -24,7 +24,7 @@ public class TaskManager {
         System.out.print("Descrição: ");
         String description = sc.nextLine();
 
-        System.out.print("Data de vencimento: (AAAA-MM-DD): ");
+        System.out.print("Data de vencimento [AAAA-MM-DD]: ");
         String stringValidity = sc.nextLine();
         LocalDate validity = LocalDate.parse(stringValidity);
 
