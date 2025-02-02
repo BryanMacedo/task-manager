@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TaskManager {
+    boolean isEqual;
     private List<Task> tasks;
 
     Scanner sc = new Scanner(System.in);
@@ -21,16 +22,25 @@ public class TaskManager {
         System.out.print("\nTítulo: ");
         String title = sc.nextLine();
 
-        System.out.print("Descrição: ");
-        String description = sc.nextLine();
+        for (Task task : tasks) {
+            this.isEqual = task.getTitle().equals(title);
+        }
 
-        System.out.print("Data da realização da tarefa [AAAA-MM-DD]: ");
-        String stringValidity = sc.nextLine();
-        LocalDate validity = LocalDate.parse(stringValidity);
+        if (!this.isEqual){
+            System.out.print("Descrição: ");
+            String description = sc.nextLine();
 
-        Task task = new Task(title, description, validity);
-        tasks.add(task);
-        System.out.println("Tarefa adicionada.\n");
+            System.out.print("Data da realização da tarefa [AAAA-MM-DD]: ");
+            String stringValidity = sc.nextLine();
+            LocalDate validity = LocalDate.parse(stringValidity);
+
+            Task task = new Task(title, description, validity);
+            tasks.add(task);
+            System.out.println("Tarefa adicionada.\n");
+        }else {
+            System.out.println("\nJá existe uma tarefa com este título, por favor crie uma tarefa com um título diferente.\n");
+        }
+
     }
 
     public void listTasks() {
