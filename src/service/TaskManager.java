@@ -1,9 +1,11 @@
 package service;
 
 import dominio.Task;
+import dominio.TypePeriod;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -34,7 +36,14 @@ public class TaskManager {
             String stringValidity = sc.nextLine();
             LocalDate validity = LocalDate.parse(stringValidity);
 
-            Task task = new Task(title, description, validity);
+            System.out.print("Período da realização da tarefa: " );
+            String stringPeriod = sc.nextLine().toUpperCase();
+
+            String stringPeriodEdited = Normalizer.normalize(stringPeriod, Normalizer.Form.NFD);
+            stringPeriodEdited = stringPeriodEdited.replaceAll("[^\\p{ASCII}]", "");
+            TypePeriod period = TypePeriod.valueOf(stringPeriodEdited);
+
+            Task task = new Task(title, description, validity, period);
             tasks.add(task);
             System.out.println("Tarefa adicionada.\n");
         }else {
