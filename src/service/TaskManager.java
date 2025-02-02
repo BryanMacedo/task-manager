@@ -57,7 +57,6 @@ public class TaskManager {
             System.out.println();
 
             if (tasks.removeIf(task -> task.getTitle().equals(titleChoice))){
-                tasks.removeIf(task -> task.getTitle().equals(titleChoice));
                 System.out.println("Tarefa removida com sucesso!\n");
             }else {
                 System.out.println("Tarefa " + "\"" + titleChoice + "\"" + " não encontrada.\n");
