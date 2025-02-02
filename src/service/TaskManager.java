@@ -52,7 +52,7 @@ public class TaskManager {
             System.out.println("\nListando as tarefas existentes:");
             listTasks();
 
-            System.out.println("Digite o título da tarefa que deseja excluir: ");
+            System.out.print("Digite o título da tarefa que deseja excluir: ");
             String titleChoice = sc.nextLine();
             System.out.println();
 
