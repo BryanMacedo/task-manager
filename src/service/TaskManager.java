@@ -32,9 +32,8 @@ public class TaskManager {
             System.out.print("Descrição: ");
             String description = sc.nextLine();
 
-            System.out.print("Data da realização da tarefa [AAAA-MM-DD]: ");
+            System.out.print("Data da realização da tarefa [DD-MM-AAAA]: ");
             String stringValidity = sc.nextLine();
-            LocalDate validity = LocalDate.parse(stringValidity);
 
             System.out.print("Período da realização da tarefa: " );
             String stringPeriod = sc.nextLine().toUpperCase();
@@ -43,7 +42,7 @@ public class TaskManager {
             stringPeriodEdited = stringPeriodEdited.replaceAll("[^\\p{ASCII}]", "");
             TypePeriod period = TypePeriod.valueOf(stringPeriodEdited);
 
-            Task task = new Task(title, description, validity, period);
+            Task task = new Task(title, description, stringValidity, period);
             tasks.add(task);
             System.out.println("Tarefa adicionada.\n");
         }else {
