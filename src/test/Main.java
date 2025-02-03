@@ -14,12 +14,13 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         int choice = 0;
 
-        while (choice != 5) {
+        while (choice != 6) {
             System.out.println("1 - Adicionar uma tarefa");
             System.out.println("2 - Listar tarefas");
             System.out.println("3 - Excluir uma tarefa");
             System.out.println("4 - Salvar lista de tarefas");
-            System.out.println("5 - Encerrar o programa");
+            System.out.println("5 - Editar uma tarefa");
+            System.out.println("6 - Encerrar o programa");
             System.out.print("Escolha: ");
             choice = sc.nextInt();
 
@@ -37,6 +38,8 @@ public class Main {
                     taskManager.saveTasks();
                 }
                 case 5 -> {
+                    taskManager.editTasks();
+                }case 6 -> {
                     System.out.println("\nEncerrando o programa.");
                 }
                 default -> {

@@ -132,6 +132,7 @@ public class TaskManager {
             System.out.println("\nListando as tarefas existentes:");
             listTasks();
 
+            sc.nextLine();
             System.out.print("Digite o título da tarefa que deseja excluir: ");
             String titleChoice = sc.nextLine();
             System.out.println();
@@ -160,6 +161,69 @@ public class TaskManager {
             } catch (IOException e) {
                 System.out.println("Erro ao tentar salvar arquivo.");
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public void editTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder utilizar a opção de editar uma tarefa.\n");
+        } else {
+            System.out.println("\nListando as tarefas existentes:");
+            listTasks();
+
+            sc.nextLine();
+            System.out.print("Digite o título da tarefa que deseja editar: ");
+            String editTitleChoice = sc.nextLine();
+
+            for (Task task : tasks) {
+                if (task.getTitle().equals(editTitleChoice)) {
+                    System.out.println("\nEscolha qual campo deseja editar: ");
+                    System.out.println("1 - Titulo");
+                    System.out.println("2 - Descrição");
+                    System.out.println("3 - Data");
+                    System.out.println("4 - Período");
+                    System.out.print("Escolha: ");
+                    int editChoice = sc.nextInt();
+
+                    switch (editChoice) {
+                        case 1 -> {
+                            sc.nextLine();
+                            System.out.print("\nDigite um novo titulo: ");
+                            String newTitle = sc.nextLine();
+
+                            task.setTitle(newTitle);
+                        }
+                        case 2 -> {
+                            sc.nextLine();
+                            System.out.print("\nDigite uma nova descrição: ");
+                            String newDescription = sc.nextLine();
+
+                            task.setDescription(newDescription);
+                        }
+                        case 3 -> {
+                            sc.nextLine();
+                            System.out.print("\nDigite uma nova data: ");
+                            String newDateString = sc.nextLine();
+
+                            LocalDate newDate = LocalDate.parse(newDateString, formatterBr);
+
+                            task.setValidity(newDate);
+                        }
+                        case 4 -> {
+                            sc.nextLine();
+                            System.out.print("\nDigite uma novo período: ");
+                            String newPeriodString = sc.nextLine().toUpperCase();
+
+                            newPeriodString = Normalizer.normalize(newPeriodString, Normalizer.Form.NFD);
+                            newPeriodString = newPeriodString.replaceAll("[^\\p{ASCII}]", "");
+                            TypePeriod newPeriod = TypePeriod.valueOf(newPeriodString);
+
+                            task.setPeriod(newPeriod);
+                            System.out.println();
+                        }
+                    }
+                }
             }
         }
     }

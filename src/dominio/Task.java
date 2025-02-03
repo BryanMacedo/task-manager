@@ -29,12 +29,32 @@ public class Task {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public LocalDate getValidity() {
         return validity;
     }
 
+    public void setValidity(LocalDate validity) {
+        this.validity = validity;
+    }
+
     public TypePeriod getPeriod() {
         return period;
+    }
+
+    public void setPeriod(TypePeriod period) {
+        this.period = period;
     }
 }
 
