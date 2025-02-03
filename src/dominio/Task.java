@@ -15,8 +15,7 @@ public class Task {
         this.title = title;
         this.description = description;
         this.period = period;
-        String textValidity = validity;
-        this.validity = LocalDate.parse(textValidity, formatterBr);
+        this.validity = LocalDate.parse(validity, formatterBr);
     }
 
     @Override
@@ -28,6 +27,14 @@ public class Task {
 
     public String getTitle() {
         return title;
+    }
+
+    public LocalDate getValidity() {
+        return validity;
+    }
+
+    public TypePeriod getPeriod() {
+        return period;
     }
 }
 

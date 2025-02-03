@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.Normalizer;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -15,6 +16,7 @@ public class TaskManager {
     private List<Task> tasks;
 
     Scanner sc = new Scanner(System.in);
+    DateTimeFormatter formatterBr = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
     public TaskManager(List<Task> tasks) {
         this.tasks = tasks;
@@ -28,14 +30,14 @@ public class TaskManager {
             this.isEqual = task.getTitle().equals(title);
         }
 
-        if (!this.isEqual){
+        if (!this.isEqual) {
             System.out.print("Descrição: ");
             String description = sc.nextLine();
 
             System.out.print("Data da realização da tarefa [DD-MM-AAAA]: ");
             String stringValidity = sc.nextLine();
 
-            System.out.print("Período da realização da tarefa: " );
+            System.out.print("Período da realização da tarefa: ");
             String stringPeriod = sc.nextLine().toUpperCase();
 
             String stringPeriodEdited = Normalizer.normalize(stringPeriod, Normalizer.Form.NFD);
@@ -45,28 +47,88 @@ public class TaskManager {
             Task task = new Task(title, description, stringValidity, period);
             tasks.add(task);
             System.out.println("Tarefa adicionada.\n");
-        }else {
+        } else {
             System.out.println("\nJá existe uma tarefa com este título, por favor crie uma tarefa com um título diferente.\n");
         }
-
     }
 
     public void listTasks() {
-        if (tasks.isEmpty()){
+        if (tasks.isEmpty()) {
             System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder lista-lá.\n");
-        }else {
-            for (Task listTask : tasks) {
-                System.out.println("\n" + listTask);
-            }
-            System.out.println();
-        }
+        } else {
+            System.out.print("\nDeseja filtrar a listagem? ");
+            String choice = sc.next();
+            choice = choice.toLowerCase();
 
+            if (choice.charAt(0) == 's') {
+                System.out.println("Opções de filtragem: ");
+                System.out.println("1 - Filtrar por data");
+                System.out.println("2 - Filtrar por período");
+                System.out.print("Escolha: ");
+                int filteredChoice = sc.nextInt();
+
+                switch (filteredChoice) {
+                    case 1 -> {
+                        sc.nextLine();
+                        System.out.print("Informe a data que deseja filtrar: ");
+                        String stringFilteredDate = sc.nextLine();
+
+                        LocalDate filteredDate = LocalDate.parse(stringFilteredDate, formatterBr);
+
+                        boolean isFound = false;
+                        for (Task filteredListTask : tasks) {
+                            if (filteredListTask.getValidity().equals(filteredDate)) {
+                                System.out.println("\n" + filteredListTask);
+                                isFound = true;
+                            }
+
+                            if (!isFound) {
+                                System.out.println("Não foi encontrado nenhuma tarefa com a data " + filteredDate.format(formatterBr) + ".");
+                            }
+                        }
+                        System.out.println();
+                    }
+                    case 2 -> {
+                        sc.nextLine();
+                        System.out.print("Informe o período que deseja filtrar: ");
+                        String stringFilteredPeriod = sc.nextLine().toUpperCase();
+
+                        String stringFilteredPeriodEdited = Normalizer.normalize(stringFilteredPeriod, Normalizer.Form.NFD);
+                        stringFilteredPeriodEdited = stringFilteredPeriodEdited.replaceAll("[^\\p{ASCII}]", "");
+                        TypePeriod period = TypePeriod.valueOf(stringFilteredPeriodEdited);
+
+                        boolean isFound = false;
+                        for (Task filteredListTask : tasks) {
+                            if (filteredListTask.getPeriod().equals(period)) {
+                                System.out.println("\n" + filteredListTask);
+                                isFound = true;
+                            }
+                        }
+
+                        if (!isFound) {
+                            System.out.println("Não foi encontrado nenhuma tarefa com o período " + period.getDayPeriod() + ".");
+                        }
+                        System.out.println();
+                    }
+                    default -> {
+                        System.out.println("\nEscolha invalida.\n");
+                    }
+                }
+
+            } else {
+                for (Task listTask : tasks) {
+                    System.out.println("\n" + listTask);
+                }
+                System.out.println();
+
+            }
+        }
     }
 
     public void removeTask() {
-        if (tasks.isEmpty()){
+        if (tasks.isEmpty()) {
             System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder utilizar a opção de remover uma tarefa.\n");
-        }else{
+        } else {
             System.out.println("\nListando as tarefas existentes:");
             listTasks();
 
@@ -74,18 +136,18 @@ public class TaskManager {
             String titleChoice = sc.nextLine();
             System.out.println();
 
-            if (tasks.removeIf(task -> task.getTitle().equals(titleChoice))){
+            if (tasks.removeIf(task -> task.getTitle().equals(titleChoice))) {
                 System.out.println("Tarefa removida com sucesso!\n");
-            }else {
+            } else {
                 System.out.println("Tarefa " + "\"" + titleChoice + "\"" + " não encontrada.\n");
             }
         }
     }
 
-    public void saveTasks(){
-        if (tasks.isEmpty()){
+    public void saveTasks() {
+        if (tasks.isEmpty()) {
             System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder salva-lá.\n");
-        }else {
+        } else {
             System.out.print("\nDigite o nome que deseja para o arquivo: ");
             String fileName = sc.nextLine();
             String path = "C:\\Users\\conta\\Desktop\\TAREFAS\\" + fileName + ".txt";
