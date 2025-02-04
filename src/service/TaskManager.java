@@ -116,6 +116,7 @@ public class TaskManager {
                 }
 
             } else {
+                sc.nextLine();
                 for (Task listTask : tasks) {
                     System.out.println("\n" + listTask);
                 }
