@@ -59,7 +59,7 @@ public class TaskManager {
             } catch (DateTimeParseException e) {
                 System.out.println("\nData inválida, por favor informe uma data no formato [DD-MM-AAAA]");
             } catch (IllegalArgumentException e) {
-                System.out.println("\nPeríodo inválido, por favor informe um dos seguintes periodos: " +
+                System.out.println("\nPeríodo inválido, por favor informe um dos seguintes períodos: " +
                         "\nmanhã, tarde, noite ou madrugada.");
             }
         }
