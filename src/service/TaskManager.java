@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class TaskManager {
@@ -71,7 +70,7 @@ public class TaskManager {
             System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder lista-lá.\n");
         } else {
             System.out.print("\nDeseja filtrar a listagem? ");
-            String choice = sc.next();
+            String choice = sc.nextLine();
             choice = choice.toLowerCase();
 
             if (choice.charAt(0) == 's') {
@@ -80,6 +79,7 @@ public class TaskManager {
                 System.out.println("2 - Filtrar por período");
                 System.out.print("Escolha: ");
                 int filteredChoice = sc.nextInt();
+                sc.nextLine();
 
                 switch (filteredChoice) {
                     case 1 -> {
@@ -130,7 +130,6 @@ public class TaskManager {
                 }
 
             } else {
-                sc.nextLine();
                 for (Task listTask : tasks) {
                     System.out.println("\n" + listTask);
                 }
@@ -184,60 +183,76 @@ public class TaskManager {
         if (tasks.isEmpty()) {
             System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder utilizar a opção de editar uma tarefa.\n");
         } else {
-            System.out.println("\nListando as tarefas existentes:");
-            listTasks();
+            boolean check = false;
+            while (!check) {
+                try {
+                    System.out.println("\nListando as tarefas existentes:");
+                    listTasks();
 
-            sc.nextLine();
-            System.out.print("Digite o título da tarefa que deseja editar: ");
-            String editTitleChoice = sc.nextLine();
+                    sc.nextLine();
+                    System.out.print("Digite o título da tarefa que deseja editar: ");
+                    String editTitleChoice = sc.nextLine();
 
-            for (Task task : tasks) {
-                if (task.getTitle().equals(editTitleChoice)) {
-                    System.out.println("\nEscolha qual campo deseja editar: ");
-                    System.out.println("1 - Titulo");
-                    System.out.println("2 - Descrição");
-                    System.out.println("3 - Data");
-                    System.out.println("4 - Período");
-                    System.out.print("Escolha: ");
-                    int editChoice = sc.nextInt();
-
-                    switch (editChoice) {
-                        case 1 -> {
+                    for (Task task : tasks) {
+                        if (task.getTitle().equals(editTitleChoice)) {
+                            System.out.println("\nEscolha qual campo deseja editar: ");
+                            System.out.println("1 - Titulo");
+                            System.out.println("2 - Descrição");
+                            System.out.println("3 - Data");
+                            System.out.println("4 - Período");
+                            System.out.print("Escolha: ");
+                            int editChoice = sc.nextInt();
                             sc.nextLine();
-                            System.out.print("\nDigite um novo titulo: ");
-                            String newTitle = sc.nextLine();
 
-                            task.setTitle(newTitle);
-                        }
-                        case 2 -> {
-                            sc.nextLine();
-                            System.out.print("\nDigite uma nova descrição: ");
-                            String newDescription = sc.nextLine();
+                            switch (editChoice) {
+                                case 1 -> {
+                                    sc.nextLine();
+                                    System.out.print("\nDigite um novo titulo: ");
+                                    String newTitle = sc.nextLine();
 
-                            task.setDescription(newDescription);
-                        }
-                        case 3 -> {
-                            sc.nextLine();
-                            System.out.print("\nDigite uma nova data: ");
-                            String newDateString = sc.nextLine();
+                                    task.setTitle(newTitle);
+                                    check = true;
+                                }
+                                case 2 -> {
+                                    sc.nextLine();
+                                    System.out.print("\nDigite uma nova descrição: ");
+                                    String newDescription = sc.nextLine();
 
-                            LocalDate newDate = LocalDate.parse(newDateString, formatterBr);
+                                    task.setDescription(newDescription);
+                                    check = true;
+                                }
+                                case 3 -> {
+                                    sc.nextLine();
+                                    System.out.print("\nDigite uma nova data: ");
+                                    String newDateString = sc.nextLine();
 
-                            task.setValidity(newDate);
-                        }
-                        case 4 -> {
-                            sc.nextLine();
-                            System.out.print("\nDigite uma novo período: ");
-                            String newPeriodString = sc.nextLine().toUpperCase();
+                                    LocalDate newDate = LocalDate.parse(newDateString, formatterBr);
 
-                            newPeriodString = Normalizer.normalize(newPeriodString, Normalizer.Form.NFD);
-                            newPeriodString = newPeriodString.replaceAll("[^\\p{ASCII}]", "");
-                            TypePeriod newPeriod = TypePeriod.valueOf(newPeriodString);
+                                    task.setValidity(newDate);
+                                    check = true;
+                                    System.out.println();
+                                }
+                                case 4 -> {
+                                    sc.nextLine();
+                                    System.out.print("\nDigite uma novo período: ");
+                                    String newPeriodString = sc.nextLine().toUpperCase();
 
-                            task.setPeriod(newPeriod);
-                            System.out.println();
+                                    newPeriodString = Normalizer.normalize(newPeriodString, Normalizer.Form.NFD);
+                                    newPeriodString = newPeriodString.replaceAll("[^\\p{ASCII}]", "");
+                                    TypePeriod newPeriod = TypePeriod.valueOf(newPeriodString);
+
+                                    task.setPeriod(newPeriod);
+                                    check = true;
+                                    System.out.println();
+                                }
+                            }
                         }
                     }
+                } catch (DateTimeParseException e) {
+                    System.out.println("\nData inválida, por favor informe uma data no formato [DD-MM-AAAA]");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("\nPeríodo inválido, por favor informe um dos seguintes periodos: " +
+                            "\nmanhã, tarde, noite ou madrugada.");
                 }
             }
         }

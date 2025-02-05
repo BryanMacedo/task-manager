@@ -25,6 +25,7 @@ public class Main {
                 System.out.println("6 - Encerrar o programa");
                 System.out.print("Escolha: ");
                 choice = sc.nextInt();
+                sc.nextLine();
 
                 switch (choice) {
                     case 1 -> {
