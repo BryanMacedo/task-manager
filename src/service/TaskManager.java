@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class TaskManager {
@@ -23,32 +25,44 @@ public class TaskManager {
     }
 
     public void addTask() {
-        System.out.print("\nTítulo: ");
-        String title = sc.nextLine();
+        boolean check = false;
+        while (!check) {
+            try {
+                System.out.print("\nTítulo: ");
+                String title = sc.nextLine();
 
-        for (Task task : tasks) {
-            this.isEqual = task.getTitle().equals(title);
-        }
+                for (Task task : tasks) {
+                    this.isEqual = task.getTitle().equals(title);
+                }
 
-        if (!this.isEqual) {
-            System.out.print("Descrição: ");
-            String description = sc.nextLine();
+                if (!this.isEqual) {
+                    System.out.print("Descrição: ");
+                    String description = sc.nextLine();
 
-            System.out.print("Data da realização da tarefa [DD-MM-AAAA]: ");
-            String stringValidity = sc.nextLine();
+                    System.out.print("Data da realização da tarefa [DD-MM-AAAA]: ");
+                    String stringValidity = sc.nextLine();
+                    LocalDate validity = LocalDate.parse(stringValidity, formatterBr);
 
-            System.out.print("Período da realização da tarefa: ");
-            String stringPeriod = sc.nextLine().toUpperCase();
+                    System.out.print("Período da realização da tarefa: ");
+                    String stringPeriod = sc.nextLine().toUpperCase();
 
-            String stringPeriodEdited = Normalizer.normalize(stringPeriod, Normalizer.Form.NFD);
-            stringPeriodEdited = stringPeriodEdited.replaceAll("[^\\p{ASCII}]", "");
-            TypePeriod period = TypePeriod.valueOf(stringPeriodEdited);
+                    String stringPeriodEdited = Normalizer.normalize(stringPeriod, Normalizer.Form.NFD);
+                    stringPeriodEdited = stringPeriodEdited.replaceAll("[^\\p{ASCII}]", "");
+                    TypePeriod period = TypePeriod.valueOf(stringPeriodEdited);
 
-            Task task = new Task(title, description, stringValidity, period);
-            tasks.add(task);
-            System.out.println("Tarefa adicionada.\n");
-        } else {
-            System.out.println("\nJá existe uma tarefa com este título, por favor crie uma tarefa com um título diferente.\n");
+                    Task task = new Task(title, description, validity, period);
+                    tasks.add(task);
+                    System.out.println("Tarefa adicionada.\n");
+                    check = true;
+                } else {
+                    System.out.println("\nJá existe uma tarefa com este título, por favor crie uma tarefa com um título diferente.\n");
+                }
+            } catch (DateTimeParseException e) {
+                System.out.println("\nData inválida, por favor informe uma data no formato [DD-MM-AAAA]");
+            } catch (IllegalArgumentException e) {
+                System.out.println("\nPeríodo inválido, por favor informe um dos seguintes periodos: " +
+                        "\nmanhã, tarde, noite ou madrugada.");
+            }
         }
     }
 
