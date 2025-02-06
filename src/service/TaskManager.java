@@ -9,6 +9,7 @@ import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -74,53 +75,84 @@ public class TaskManager {
             choice = choice.toLowerCase();
 
             if (choice.charAt(0) == 's') {
-                System.out.println("Opções de filtragem: ");
-                System.out.println("1 - Filtrar por data");
-                System.out.println("2 - Filtrar por período");
-                System.out.print("Escolha: ");
-                int filteredChoice = sc.nextInt();
-                sc.nextLine();
+                int filteredChoice = 0;
+                boolean check = false;
+                while (!check) {
+                    try{
+                        System.out.println("Opções de filtragem: ");
+                        System.out.println("1 - Filtrar por data");
+                        System.out.println("2 - Filtrar por período");
+                        System.out.print("Escolha: ");
+                        filteredChoice = sc.nextInt();
+                        if (filteredChoice != 1 && filteredChoice != 2){
+                            throw new InputMismatchException();
+                        }
+                        check = true;
+                    }catch (InputMismatchException e){
+                        System.out.println("\nOpção inválida, por favor informe o número da opção desejada.\n");
+                        sc.nextLine();
+                    }
+                }
+
 
                 switch (filteredChoice) {
                     case 1 -> {
                         sc.nextLine();
-                        System.out.print("Informe a data que deseja filtrar: ");
-                        String stringFilteredDate = sc.nextLine();
+                        boolean checkIntoSwitch = false;
+                        while (!checkIntoSwitch) {
+                            try {
+                                System.out.print("Informe a data que deseja filtrar: ");
+                                String stringFilteredDate = sc.nextLine();
 
-                        LocalDate filteredDate = LocalDate.parse(stringFilteredDate, formatterBr);
+                                LocalDate filteredDate = LocalDate.parse(stringFilteredDate, formatterBr);
 
-                        boolean isFound = false;
-                        for (Task filteredListTask : tasks) {
-                            if (filteredListTask.getValidity().equals(filteredDate)) {
-                                System.out.println("\n" + filteredListTask);
-                                isFound = true;
-                            }
+                                boolean isFound = false;
+                                for (Task filteredListTask : tasks) {
+                                    if (filteredListTask.getValidity().equals(filteredDate)) {
+                                        System.out.println("\n" + filteredListTask);
+                                        isFound = true;
+                                    }
 
-                            if (!isFound) {
-                                System.out.println("Não foi encontrado nenhuma tarefa com a data " + filteredDate.format(formatterBr) + ".");
+                                    if (!isFound) {
+                                        System.out.println("Não foi encontrado nenhuma tarefa com a data " + filteredDate.format(formatterBr) + ".");
+                                    }
+                                }
+                                checkIntoSwitch = true;
+                            }catch (DateTimeParseException e) {
+                                System.out.println("\nData inválida, por favor informe uma data no formato [DD-MM-AAAA]\n");
                             }
                         }
+
                         System.out.println();
                     }
                     case 2 -> {
                         sc.nextLine();
-                        System.out.print("Informe o período que deseja filtrar: ");
-                        String stringFilteredPeriod = sc.nextLine().toUpperCase();
+                        boolean checkIntoSwitch = false;
+                        while (!checkIntoSwitch) {
+                            try {
+                                System.out.print("Informe o período que deseja filtrar: ");
+                                String stringFilteredPeriod = sc.nextLine().toUpperCase();
 
-                        String stringFilteredPeriodEdited = Normalizer.normalize(stringFilteredPeriod, Normalizer.Form.NFD);
-                        stringFilteredPeriodEdited = stringFilteredPeriodEdited.replaceAll("[^\\p{ASCII}]", "");
-                        TypePeriod period = TypePeriod.valueOf(stringFilteredPeriodEdited);
+                                String stringFilteredPeriodEdited = Normalizer.normalize(stringFilteredPeriod, Normalizer.Form.NFD);
+                                stringFilteredPeriodEdited = stringFilteredPeriodEdited.replaceAll("[^\\p{ASCII}]", "");
+                                TypePeriod period = TypePeriod.valueOf(stringFilteredPeriodEdited);
 
-                        boolean isFound = false;
-                        for (Task filteredListTask : tasks) {
-                            if (filteredListTask.getPeriod().equals(period)) {
-                                System.out.println("\n" + filteredListTask);
-                                isFound = true;
+                                boolean isFound = false;
+                                for (Task filteredListTask : tasks) {
+                                    if (filteredListTask.getPeriod().equals(period)) {
+                                        System.out.println("\n" + filteredListTask);
+                                        isFound = true;
+                                    }
+                                }
+
+                                if (!isFound) {
+                                    System.out.println("Não foi encontrado nenhuma tarefa com o período " + period.getDayPeriod() + ".");
+                                }
+                                checkIntoSwitch = true;
+                            }catch (IllegalArgumentException e) {
+                                System.out.println("\nPeríodo inválido, por favor informe um dos seguintes períodos: " +
+                                        "\nmanhã, tarde, noite ou madrugada.\n");
                             }
-                        }
-
-                        if (!isFound) {
-                            System.out.println("Não foi encontrado nenhuma tarefa com o período " + period.getDayPeriod() + ".");
                         }
                         System.out.println();
                     }
