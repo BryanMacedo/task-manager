@@ -3,6 +3,7 @@ package service;
 import dominio.Task;
 import dominio.TypePeriod;
 
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.Normalizer;
@@ -78,17 +79,17 @@ public class TaskManager {
                 int filteredChoice = 0;
                 boolean check = false;
                 while (!check) {
-                    try{
+                    try {
                         System.out.println("Opções de filtragem: ");
                         System.out.println("1 - Filtrar por data");
                         System.out.println("2 - Filtrar por período");
                         System.out.print("Escolha: ");
                         filteredChoice = sc.nextInt();
-                        if (filteredChoice != 1 && filteredChoice != 2){
+                        if (filteredChoice != 1 && filteredChoice != 2) {
                             throw new InputMismatchException();
                         }
                         check = true;
-                    }catch (InputMismatchException e){
+                    } catch (InputMismatchException e) {
                         System.out.println("\nOpção inválida, por favor informe o número da opção desejada.\n");
                         sc.nextLine();
                     }
@@ -118,7 +119,7 @@ public class TaskManager {
                                     }
                                 }
                                 checkIntoSwitch = true;
-                            }catch (DateTimeParseException e) {
+                            } catch (DateTimeParseException e) {
                                 System.out.println("\nData inválida, por favor informe uma data no formato [DD-MM-AAAA]\n");
                             }
                         }
@@ -149,7 +150,7 @@ public class TaskManager {
                                     System.out.println("Não foi encontrado nenhuma tarefa com o período " + period.getDayPeriod() + ".");
                                 }
                                 checkIntoSwitch = true;
-                            }catch (IllegalArgumentException e) {
+                            } catch (IllegalArgumentException e) {
                                 System.out.println("\nPeríodo inválido, por favor informe um dos seguintes períodos: " +
                                         "\nmanhã, tarde, noite ou madrugada.\n");
                             }
@@ -195,18 +196,24 @@ public class TaskManager {
         if (tasks.isEmpty()) {
             System.out.println("\nNenhuma tarefa existente no momento, por favor crie uma tarefa para poder salva-lá.\n");
         } else {
-            System.out.print("\nDigite o nome que deseja para o arquivo: ");
-            String fileName = sc.nextLine();
-            String path = "C:\\Users\\conta\\Desktop\\TAREFAS\\" + fileName + ".txt";
-            System.out.println();
-            try (FileWriter writer = new FileWriter(path)) {
-                for (Task task : tasks) {
-                    writer.write(task + "\n\n");
+            boolean check = false;
+            while (!check) {
+                System.out.print("\nDigite o nome que deseja para o arquivo: ");
+                String fileName = sc.nextLine();
+                String path = "C:\\Users\\conta\\Desktop\\TAREFAS\\" + fileName + ".txt";
+                System.out.println();
+                try (FileWriter writer = new FileWriter(path)) {
+                    for (Task task : tasks) {
+                        writer.write(task + "\n\n");
+                    }
+                    System.out.println("Tarefa salva.\n");
+                    check = true;
+                } catch (FileNotFoundException e) {
+                    System.out.println("Não é possível salvar uma tarefa com \\ no nome, por favor informe um nome sem este caractere.");
+                } catch (IOException e) {
+                    System.out.println("Falha ao tentar salvar arquivo.");
+                    e.printStackTrace();
                 }
-                System.out.println("Tarefa salva.\n");
-            } catch (IOException e) {
-                System.out.println("Erro ao tentar salvar arquivo.");
-                e.printStackTrace();
             }
         }
     }
