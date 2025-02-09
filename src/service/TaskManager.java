@@ -81,8 +81,8 @@ public class TaskManager {
                 while (!check) {
                     try {
                         System.out.println("Opções de filtragem: ");
-                        System.out.println("1 - Filtrar por data");
-                        System.out.println("2 - Filtrar por período");
+                        System.out.println("1 - Filtrar por data.");
+                        System.out.println("2 - Filtrar por período.");
                         System.out.print("Escolha: ");
                         filteredChoice = sc.nextInt();
                         if (filteredChoice != 1 && filteredChoice != 2) {
